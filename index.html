@@ -3,37 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHΔDØW DL - احترافية التحميل الذكي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;900&display=swap" rel="stylesheet">
-    
+    <title>SHΔDØW DL | محرك التحميل الذكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #00f2fe;
-            --secondary: #4facfe;
-            --bg-dark: #0b0e14;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --text-main: #ffffff;
-            --text-dim: #a0a4b8;
-        }
+        :root { --primary: #00f2fe; --secondary: #4facfe; --dark: #080a10; }
+        body { margin: 0; background: var(--dark); color: white; font-family: 'Cairo', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 500px; text-align: center; }
+        .logo { font-size: 32px; font-weight: 900; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        input { width: 100%; padding: 15px; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; box-sizing: border-box; margin-bottom: 20px; font-size: 16px; }
+        .btn { width: 100%; padding: 15px; background: linear-gradient(45deg, var(--secondary), var(--primary)); border: none; border-radius: 12px; color: #000; font-weight: bold; cursor: pointer; font-size: 18px; }
+        #result { margin-top: 25px; padding: 15px; border-radius: 10px; background: rgba(0,242,254,0.1); display: none; }
+        .loading { display: none; margin: 20px 0; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
 
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% -20%, #1e2642, var(--bg-dark));
-            color: var(--text-main);
-            font-family: 'Cairo', sans-serif;
-            display: flex; flex-direction: column;
-            min-height: 100vh; align-items: center; justify-content: center;
-        }
+<div class="container">
+    <div class="logo">SHΔDØW DL</div>
+    <p style="color: #888;">حمل من TikTok و Instagram بدون علامة مائية</p>
+    
+    <input type="text" id="videoUrl" placeholder="أدخل رابط الفيديو هنا...">
+    <button class="btn" onclick="startDownload()">استخراج وتحميل</button>
 
-        /* حاوية التصميم الرئيسية */
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 40px 30px;
-            width: 90%; max-width: 550px;
+    <div class="loading" id="loaderBox">
+        <div class="loader"></div> <span>جاري معالجة الرابط...</span>
+    </div>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    async function startDownload() {
+        const url = document.getElementById('videoUrl').value;
+        const resBox = document.getElementById('result');
+        const loader = document.getElementById('loaderBox');
+
+        if (!url) { alert("يرجى وضع الرابط!"); return; }
+
+        // 1. فتح إعلان Monetag (استبدل الرابط أدناه برابط الـ Direct Link الخاص بك)
+        window.open('https://www.profitablecpmrate.com/your_direct_link_here', '_blank');
+
+        // 2. تفعيل واجهة التحميل
+        resBox.style.display = "none";
+        loader.style.display = "block";
+
+        try {
+            // استخدام محرك معالجة (API) بديل وأكثر استقراراً
+            const response = await fetch(`https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(url)}`);
+            const data = await response.json();
+
+            if (data.status === 200) {
+                const video = data.result.video.noWatermark || data.result.video.url;
+                loader.style.display = "none";
+                resBox.style.display = "block";
+                resBox.innerHTML = `
+                    <p style="color:#00ffcc;">✅ جاهز للتحميل!</p>
+                    <a href="${video}" target="_blank" style="display:inline-block; padding:10px 20px; background:white; color:black; border-radius:8px; text-decoration:none; font-weight:bold;">اضغط هنا لحفظ الفيديو</a>
+                `;
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            loader.style.display = "none";
+            resBox.style.display = "block";
+            resBox.innerHTML = "❌ السيرفر مشغول حالياً، حاول مرة أخرى أو تأكد من الرابط.";
+        }
+    }
+</script>
+
+</body>
+</html>
             text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             animation: slideUp 0.8s ease-out;
